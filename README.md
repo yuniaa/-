@@ -43,7 +43,7 @@ gulp
 
 ## 接下来要做什么
 
-将webpack、bower融合进项目中，整在规划中...
+webpack webpack webpack 
 
 
 
