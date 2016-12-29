@@ -1,32 +1,30 @@
 @charset "UTF-8";
 
 //-------------------------
-// Base
+// import
 //-------------------------
 @import "base/reset";
 @import "base/mixin";
-@import "base/common";
 
 //移动web
 @import "base/css3";
 @import "base/media";
 
-//dpr不同时设置字号
-$fzs : 12, 14, 16, 18, 20, 22, 24;
-@each $fz in $fzs{ 
-	.f#{$fz}{
-		@include font-dpr($fz * 1px)
-	}
+//common
+@import "base/common";
+
+
+
+.half640 {
+	width: rem(320);
+	height: rem(320);
+	border: 1px solid #f00;
+	@include flexCenter;
 }
 
-
-.test{
+.half750 {
 	width: rem(375);
 	height: rem(375);
-	background: blue;
-}
-
-h1{
-	
-	font-weight: normal;
+	border: 1px solid #f00;
+	@include flexCenter;
 }

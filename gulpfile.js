@@ -59,22 +59,21 @@
 				compatibility: 'ie7',
 				advanced: false
 			}))
-			.pipe(rename({
-				basename : 'css'
-			}))
 			.pipe(sourcemaps.write('.map/'))
 			.pipe(gulp.dest(paths.css))
 			.pipe(filter(paths.css + '**/*.css')) // Filtering stream to only css files
-			.pipe(reload({stream:true})) //need browserSync
+			.pipe(reload({
+				stream: true
+			})) //need browserSync
 			.pipe(gulp.dest(paths.css))
 			.pipe(cleanCSS({
 				keepBreaks: false,
 				compatibility: 'ie7'
 			}))
-			.pipe(rename({
-				basename : 'css.min'
+			.pipe(rename(function(path) {
+				path.basename += '.min';
 			}))
-			.pipe(gulp.dest(paths.css));  
+			.pipe(gulp.dest(paths.css));
 	});
 
 	gulp.task('script', function(){

@@ -3,33 +3,6 @@
 //------------------
 @import "prefixer";
 
-/**
- * px to rem
- * @param  {[number]} $px    		[设计稿的真实尺寸]
- * @param  {[number]} $base: 75     [设计稿的基数，640的设计稿为40,750的设计稿为75]
- * @return {[string]}        		[返回的数值]
- */
-@function rem($px, $base: 75){
-	@if (unitless($px)) {
-		@return $px / $base * 1rem;
-	} @else{
-		@warn "#{$px} has 'px', please remove it";
-		@return $px;
-	}
-}
-
-@mixin font-dpr($font-size){
-    font-size: $font-size;
-
-    [data-dpr="2"] & {
-        font-size: $font-size * 2;  /*no*/
-    }
-
-    [data-dpr="3"] & {
-        font-size: $font-size * 3;  /*px*/
-    }
-}
-
 //css3
 @mixin radius($radius) {
 	@include prefixer(border-radius, $radius);
@@ -249,3 +222,9 @@
 	}
 }
 
+
+@mixin flexCenter() {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}

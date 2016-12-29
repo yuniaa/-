@@ -3,7 +3,50 @@
 //------------------
 @import "prefixer";
 
-//清除浮动
+/**
+ * 根据当前设计稿进行单位转换
+ * $isPX   {[boolean]}    	[是否使用px单位 	true => 始终返回640比例的尺寸   false => 返回rem单位]
+ * $design {[number]} 	  	[当前设计稿尺寸	640/750]
+ * $output {[number]} 	  	[需要输出的数值类型  640/750 	修改数值需修改对应的js   640=>rem.js   750=>flexible.js]
+ * @param  {[number]} $px 	[不带单位的数值]
+ * 
+ * @return {[string]}     	[返回rem或px 取决于$isPX]
+ */
+$isPX: false;
+$design: 750;
+$output: 750; //修改次数值需修改对应的js引用 640=>rem.js  750=>flexible.js
+@function rem($px) {
+	@if $design == 750 { //如果设计稿为750
+		@if $isPX { //750输出640比例的px
+			@return ($px * 640 / 750) / 2 * 1px;
+		} @else { //输出rem
+			@if $output == 640 {
+				@return ($px * 640 / 750) / 40 * 1rem;
+			}
+			@if $output == 750 {
+				@return $px / 75 * 1rem;
+			}
+		}
+	}
+	@if $design == 640 { //如果设计稿为640
+		@if $isPX {
+			@return $px / 2 * 1px;
+		} @else { //输出rem
+			@if $output == 640 {
+				@return $px / 40 * 1rem;
+			}
+			@if $output == 750 {
+				@return ($px * 750 / 640) / 75 * 1rem;
+			}
+		}
+	}
+}
+
+
+/**
+ * 清除浮动
+ * @param  {[type]} $legacy-support-for-ie: true     [是否支持ie8-  默认支持]
+ */
 @mixin clearfix($legacy-support-for-ie: true) {
     @if $legacy-support-for-ie {
         *zoom: 1;
@@ -21,9 +64,12 @@
     @include clearfix;
 }
 
-//渐变效果
-//@param  {[float]} $opacity      		 	[opacity] 0-1的小数
-//@param  {[boolean]} $support-for-ie       [true] 支持IE8-,[false] 不支持IE8-
+
+/**
+ * [半透明]
+ * @param  {[type]} $opacity:.65         [透明数值 0-1]
+ * @param  {[type]} $support-for-ie:true [是否支持ie8-  默认支持]
+ */
 @mixin opacity($opacity:.65, $support-for-ie:true) {
 	opacity: $opacity;
 	@if $support-for-ie{
@@ -33,23 +79,26 @@
 }
 
 
-//背景半透明
-//@param  {#HEX  } $color               		十六进制的色值，如：#aabbcc
-//@param  {number} $opacity             		0-1的小数
-//@param  {boolean} $support-for-ie:true 		如果为真，支持ie
+/**
+ * 背景半透明
+ * @param  {[type]} $color               [色值 如：#f00]
+ * @param  {[type]} $opacity             [透明度  0-1]
+ * @param  {[type]} $support-for-ie:true [是否支持ie  默认支持]
+ */
 @mixin rgba($color, $opacity, $support-for-ie:true){
 	background-color:rgba($color,$opacity);
 	@if $support-for-ie{
 		filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#{ie-hex-str(rgba($color,$opacity))},endColorstr=#{ie-hex-str(rgba($color,$opacity))});
 		:root & {
-			filter: none;
+			filter: none; //for ie9
 		}
 	}
 }
 
-//[center 居中]
-//@param  {[number]} $width  		[居中元素的宽度]
-//@param  {[number]} $height		[居中元素的高度]
+
+/**
+ * 绝对定位版 绝对居中
+ */
 @mixin center($width: null, $height: null) {
 	position: absolute;
 	top: 50%;
@@ -111,12 +160,13 @@
 	}
 }
 
+
 //input等输入框的默认样式重置
 @mixin placeholder($color){
 	&::-webkit-input-placeholder { 
 		color: $color; 
 	} 
-	&:-moz-placeholder { 
+	&:-moz-placeholder {
 		color: $color;
 	} 
 	&::-moz-placeholder { 
@@ -128,8 +178,9 @@
 }
 
 
-//半透明阴影
-//@param  {[number]} $zIndex: 1000  [z轴的高度]
+/**
+ * 全屏遮罩
+ */
 @mixin mask($zIndex: 1000){
 	position: fixed;
 	top: 0;
@@ -151,4 +202,15 @@
 		background: url(unquote($url)) $else; 
 	}
 	@include prefixer(background-size, $size);
+}
+
+
+/**
+ * 使用原生滚动 & 隐藏滚动条
+ */
+@mixin scrollbar() {
+	-webkit-overflow-scrolling: touch;
+	&::-webkit-scrollbar {
+		display: none;
+	}
 }
